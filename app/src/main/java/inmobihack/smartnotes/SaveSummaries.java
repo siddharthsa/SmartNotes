@@ -129,7 +129,7 @@ public class SaveSummaries extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTitle("Summarized Text");
         setContentView(R.layout.activity_write_read_summaries);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

@@ -48,6 +48,7 @@ public class ViewSummaryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.activity_view_summary);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -57,6 +58,7 @@ public class ViewSummaryActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.summary_content);
 
         String selectedFile = getIntent().getExtras().getString("summaryFile");
+        setTitle(selectedFile);
 
         FileInputStream fis;
         StringBuilder sb = new StringBuilder();

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:appNs="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="inmobihack.smartnotes.SummaryActivity">
 
@@ -12,11 +14,17 @@
         android:layout_height="352dp"
         android:id="@+id/summarizedoutput"/>
 
-    <Button
-        android:id="@+id/approve_button"
-        style="?metaButtonBarButtonStyle"
-        android:layout_width="202dp"
-        android:layout_height="105dp"
-        android:text="@string/save"/>
+
+    <at.markushi.ui.CircleButton
+    android:id="@+id/approve_button"
+    style="?metaButtonBarButtonStyle"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/approve"
+        android:src="@drawable/ic_action_tick"
+        app:cb_color="#99CC00"
+        app:cb_pressedRingWidth="8dip"
+        />
 
 </LinearLayout>

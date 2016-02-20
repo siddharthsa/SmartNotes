@@ -101,14 +101,13 @@ public class SummaryActivity extends AppCompatActivity {
         if (result != null){
             if (fileName.isEmpty())
                 fileName = String.valueOf(System.currentTimeMillis());
-            writeInternal();
+            writeInternal(fileName);
         }
         else
             Toast.makeText(getApplicationContext(), "no result to be saved",Toast.LENGTH_SHORT);
     }
 
-    private void writeInternal() {
-        String filename = "filename";
+    private void writeInternal(String filename) {
 
         FileOutputStream outputStream;
         Log.d(LOG_TAG, "saveContentToDisk: Entered");

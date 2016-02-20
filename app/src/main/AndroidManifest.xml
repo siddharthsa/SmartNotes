@@ -4,6 +4,7 @@
 
     <!-- TODO: Permissions (Grant automatically or run-time) -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"

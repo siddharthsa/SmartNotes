@@ -57,13 +57,13 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    toggleButton.setBackgroundResource(R.drawable.default_mic);
+                    toggleButton.setBackgroundResource(R.drawable.pressed_mic);
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setIndeterminate(true);
                     speech.startListening(recognizerIntent);
                 }
                 else{
-                    toggleButton.setBackgroundResource(R.drawable.pressed_mic);
+                    toggleButton.setBackgroundResource(R.drawable.default_mic);
                     progressBar.setIndeterminate(false);
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
@@ -154,7 +154,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra("recognizedString", text);
-        //startActivity(intent);
+        startActivity(intent);
         returnedText.setText(text);
     }
 

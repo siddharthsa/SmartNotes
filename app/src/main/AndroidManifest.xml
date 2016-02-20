@@ -41,7 +41,7 @@
             android:name=".ViewSummaryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_view_summary"
-            android:parentActivityName=".RecordingActivityEmpty"
+            android:parentActivityName=".ListNotesActivity"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

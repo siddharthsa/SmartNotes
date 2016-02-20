@@ -36,7 +36,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
-        waveFormView.updateAmplitude(0,false);
+        waveFormView.updateAmplitude(0, false);
 
         progressBar.setVisibility(View.INVISIBLE);
         speech = SpeechRecognizer.createSpeechRecognizer(this);
@@ -47,8 +47,10 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
+        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
 
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -104,7 +106,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     public void onRmsChanged(float rmsdB) {
         Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         progressBar.setProgress((int) rmsdB);
-        waveFormView.updateAmplitude(rmsdB/12, true);
+        waveFormView.updateAmplitude(rmsdB / 12, true);
     }
 
     @Override
@@ -149,13 +151,20 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra("recognizedString", text);
-        startActivity(intent);
+        //startActivity(intent);
         returnedText.setText(text);
     }
 
     @Override
     public void onPartialResults(Bundle partialResults) {
         Log.i(LOG_TAG, "onPartialResults" + partialResults);
+        ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+
+        if (matches!= null || matches.size() > 0){
+            Log.i(LOG_TAG,"PartialResult: " + matches.get(0));
+            returnedText.setText(matches.get(0));
+        }
+
     }
 
     @Override

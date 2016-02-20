@@ -51,6 +51,5 @@ public class Intellexer {
             text += "\n";
         }
         new Intellexer().summarize(text, 10);
-
     }
 }

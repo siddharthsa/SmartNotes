@@ -36,7 +36,7 @@
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <Button
+            <ToggleButton
                 android:id="@+id/dummy_button"
                 style="?metaButtonBarButtonStyle"
                 android:layout_width="0dp"

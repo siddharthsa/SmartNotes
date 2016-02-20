@@ -3,4 +3,11 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_write_read_summaries">WriteReadSummaries</string>
+    <string name="file_name">Enter File Name</string>
+    <string name="create_summary_notes">Generate Summaries</string>
+
+    <string name="title_activity_list_notes_acitivity">ListNotesAcitivity</string>
+    <string name="list_notes">Saved Notes</string>
 </resources>

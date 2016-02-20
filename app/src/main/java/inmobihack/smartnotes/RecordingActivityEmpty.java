@@ -32,8 +32,9 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
-    private final int pauseinMillis = 1000;
+    private final int pauseinMillis = 700;
     private String previousResult="";
+    private String finalGlobalResult="";
 
     private AtomicLong previousCall = new AtomicLong(0);
     private ConcurrentLinkedQueue<Integer> fullStops = new ConcurrentLinkedQueue<>();
@@ -56,9 +57,12 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
-        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 100000);
+//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,100000);
+//        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS,100000);
+
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         previousCall = new AtomicLong(0);
         fullStops = new ConcurrentLinkedQueue<>();
@@ -128,8 +132,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     @Override
     public void onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech");
-        toggleButton.setChecked(false);
-        waveFormView.updateAmplitude(0, false);
+        if(!toggleButton.isChecked()) {
+            toggleButton.setChecked(false);
+            waveFormView.updateAmplitude(0, false);
+        }
+
     }
 
     @Override
@@ -149,10 +156,16 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         // TODO: StringBuilder
         String finalResult = matches.get(0);
         finalResult = punctuate(finalResult);
-        Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra("recognizedString",finalResult);
-        startActivity(intent);
-        returnedText.setText(finalResult);
+        finalGlobalResult+= " "+finalResult;
+        if(!toggleButton.isChecked()) {
+            Intent intent = new Intent(this, SummaryActivity.class);
+            intent.putExtra("recognizedString", finalGlobalResult);
+            startActivity(intent);
+            returnedText.setText(finalGlobalResult);
+        }else{
+         speech.startListening(recognizerIntent);
+        }
+
     }
 
     private String punctuate(String text){

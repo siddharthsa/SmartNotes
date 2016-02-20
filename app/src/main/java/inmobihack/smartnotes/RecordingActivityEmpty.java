@@ -70,6 +70,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
+                    returnedText.setText("");
                     toggleButton.setBackgroundResource(R.drawable.pressed_mic);
                     speech.startListening(recognizerIntent);
                 }
@@ -195,34 +196,34 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         String message;
         switch (errorCode) {
             case SpeechRecognizer.ERROR_AUDIO:
-                message = "Audio recording error";
+                message = "Audio recording error. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_CLIENT:
-                message = "Client side error";
+                message = "Client side error. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                message = "Insufficient permissions";
+                message = "Insufficient permissions. Please give permissions from Settings > Apps and try again.";
                 break;
             case SpeechRecognizer.ERROR_NETWORK:
-                message = "Network error";
+                message = "Network error. Please switch on your network and try again";
                 break;
             case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                message = "Network timeout";
+                message = "Network timeout. Network is very poor. Please switch to a better network and try again";
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
-                message = "No match";
+                message = "No match found for the voice. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                message = "RecognitionService busy";
+                message = "RecognitionService seems to be used by another app. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_SERVER:
-                message = "error from server";
+                message = "Some issue with server. Please try again";
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                message = "No speech input";
+                message = "Start speaking when you see wave. Please try again.";
                 break;
             default:
-                message = "Didn't understand, please try again.";
+                message = "Something went wrong, please try again.";
                 break;
         }
         return message;

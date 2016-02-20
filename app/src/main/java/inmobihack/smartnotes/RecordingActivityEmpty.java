@@ -74,7 +74,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
                 }
                 else{
                     toggleButton.setBackgroundResource(R.drawable.default_mic);
-
                     progressBar.setIndeterminate(false);
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();

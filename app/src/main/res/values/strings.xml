@@ -10,7 +10,7 @@
 
     <string name="title_activity_list_notes_acitivity">ListNotesAcitivity</string>
     <string name="list_notes">Saved Notes</string>
-    <string name="approve">Looks good!</string>
+    <string name="approve">Looks\ngood!</string>
 
     <string name="title_activity_view_summary">ViewSummaryActivity</string>
 </resources>

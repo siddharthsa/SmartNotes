@@ -13,4 +13,7 @@
     <string name="approve">Looks good!</string>
 
     <string name="title_activity_view_summary">ViewSummaryActivity</string>
+    <string name="filename_hint">filename</string>
+    <string name="save">save</string>
+    <string name="close">close</string>
 </resources>

@@ -1,5 +1,8 @@
 package inmobihack.smartnotes;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.speech.RecognitionListener;
@@ -8,6 +11,7 @@ import android.speech.SpeechRecognizer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
@@ -63,9 +67,12 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         previousCall = new AtomicLong(0);
         fullStops = new ConcurrentLinkedQueue<>();
 
+        final Context context = this;
+
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 if (isChecked){
                     toggleButton.setBackgroundResource(R.drawable.pressed_mic);
                     progressBar.setVisibility(View.VISIBLE);
@@ -80,8 +87,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
                 }
             }
         });
-
-
     }
 
 

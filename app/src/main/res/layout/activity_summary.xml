@@ -13,10 +13,10 @@
         android:id="@+id/summarizedoutput"/>
 
     <Button
-    android:id="@+id/approve_button"
-    style="?metaButtonBarButtonStyle"
-    android:layout_width="202dp"
-    android:layout_height="105dp"
-        android:text="@string/approve"/>
+        android:id="@+id/approve_button"
+        style="?metaButtonBarButtonStyle"
+        android:layout_width="202dp"
+        android:layout_height="105dp"
+        android:text="@string/save"/>
 
 </LinearLayout>

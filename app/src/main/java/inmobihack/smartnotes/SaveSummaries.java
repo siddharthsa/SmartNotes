@@ -101,8 +101,6 @@ public class SaveSummaries extends AppCompatActivity {
         // Get the directory for the user's public pictures directory.
        // writeExternal();
         writeInternal();
-
-
     }
 
     private void writeInternal() {
@@ -126,9 +124,7 @@ public class SaveSummaries extends AppCompatActivity {
             Log.d(TAG, "exception", e);
             e.printStackTrace();
         }
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -14,6 +14,7 @@
         android:layout_height="352dp"
         android:id="@+id/summarizedoutput"/>
 
+
     <at.markushi.ui.CircleButton
     android:id="@+id/approve_button"
     style="?metaButtonBarButtonStyle"

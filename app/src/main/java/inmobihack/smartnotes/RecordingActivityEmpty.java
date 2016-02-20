@@ -1,5 +1,8 @@
 package inmobihack.smartnotes;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.speech.RecognitionListener;
@@ -8,6 +11,7 @@ import android.speech.SpeechRecognizer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
@@ -28,7 +32,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
-//    private CountDownTimer countDownTimer;
     private final int pauseinMillis = 1000;
     private String finalResult;
     private int prevLength = 0;
@@ -61,9 +64,12 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         finalResult = "";
 
+        final Context context = this;
+
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 if (isChecked){
                     toggleButton.setBackgroundResource(R.drawable.pressed_mic);
                     progressBar.setVisibility(View.VISIBLE);
@@ -78,19 +84,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
                 }
             }
         });
-
-//        countDownTimer = new CountDownTimer(1000, 500) {
-//
-//            public void onTick(long millisUntilFinished) {
-//
-//            }
-//
-//            public void onFinish() {
-//                finalResult+=". ";
-//                Log.i(LOG_TAG, "Sentence Finished");
-//            }
-//        }.start();
-
     }
 
     /// Activity methods

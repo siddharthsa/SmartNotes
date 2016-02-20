@@ -23,7 +23,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
     private TextView returnedText;
     private ToggleButton toggleButton;
-    private ProgressBar progressBar;
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
@@ -40,13 +39,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         setContentView(R.layout.activity_recording_activity_empty);
 
         returnedText = (TextView) findViewById(R.id.textView1);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
         toggleButton.setBackgroundResource(R.drawable.default_mic);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
         waveFormView.updateAmplitude(0, false);
 
-        progressBar.setVisibility(View.INVISIBLE);
         speech = SpeechRecognizer.createSpeechRecognizer(this);
 
         speech.setRecognitionListener(this);
@@ -66,14 +63,10 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     toggleButton.setBackgroundResource(R.drawable.pressed_mic);
-                    progressBar.setVisibility(View.VISIBLE);
-                    progressBar.setIndeterminate(true);
                     speech.startListening(recognizerIntent);
                 }
                 else{
                     toggleButton.setBackgroundResource(R.drawable.default_mic);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
                 }
             }
@@ -122,14 +115,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     @Override
     public void onBeginningOfSpeech() {
         Log.i(LOG_TAG, "onBeginningOfSpeech");
-        progressBar.setIndeterminate(false);
-        progressBar.setMax(10);
     }
 
     @Override
     public void onRmsChanged(float rmsdB) {
         Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
-        progressBar.setProgress((int) rmsdB);
         waveFormView.updateAmplitude(rmsdB / 12, true);
     }
 
@@ -142,7 +132,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     @Override
     public void onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech");
-        progressBar.setIndeterminate(true);
         toggleButton.setChecked(false);
         waveFormView.updateAmplitude(0, false);
     }

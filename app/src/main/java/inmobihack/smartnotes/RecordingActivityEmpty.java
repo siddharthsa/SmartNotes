@@ -187,17 +187,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
                 Log.i(LOG_TAG, "Adding full stop");
                 fullStops.add(previousResult.split(" ").length);
             }
-//            String partialString = matches.get(0);
-//            if (prevLength + 1 < partialString.length()) {
-//
-//                String newWord = partialString.substring((prevLength == 0) ? 0 : prevLength + 1);
-//                finalResult += " " + newWord;
-//
-//                returnedText.setText(newWord);
-//                Log.i(LOG_TAG, "newWord: " + newWord);
-//                prevLength = partialString.length();
-//
-//            }
             previousResult = matches.get(0);
             previousCall.set(System.currentTimeMillis());
         }

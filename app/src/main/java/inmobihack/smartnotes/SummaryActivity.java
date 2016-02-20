@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -38,7 +39,7 @@ public class SummaryActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.summarizedoutput);
         Bundle p = getIntent().getExtras();
         String text = p.getString("recognizedString");
-        Set<String> result = null;
+        List<String> result = null;
         try {
             result = new BackGroundTask().execute(text).get();
         } catch (InterruptedException e) {
@@ -46,7 +47,11 @@ public class SummaryActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        editText.setText(result.toString());
+        String displayString ="";
+        for(String st:result){
+            displayString+=st+"\n";
+        }
+        editText.setText(displayString);
 
         findViewById(R.id.approve_button).setOnClickListener(saveSummaryListener);
     }
@@ -55,10 +60,10 @@ public class SummaryActivity extends AppCompatActivity {
         return null;
     }
 
-    class BackGroundTask extends AsyncTask<String,Void,Set<String>>{
+    class BackGroundTask extends AsyncTask<String,Void,List<String>>{
 
         @Override
-        protected Set<String> doInBackground(String... params) {
+        protected List<String> doInBackground(String... params) {
             return new Intellexer().summarize(params[0], 33);
         }
     }

@@ -8,7 +8,9 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,10 +18,10 @@ import java.util.Set;
  */
 public class Intellexer {
     private static final String apiEndpoint = "http://api.intellexer.com/summarizeText?apikey=00b85c4c-398d-447b-ad5e-edb0caca211c&usePercentRestriction=true";
-    public Set<String> summarize(String text,int outputLength){
+    public List<String> summarize(String text,int outputLength){
         RestClient restClient = new RestClient();
         ObjectMapper mapper = new ObjectMapper();
-        Set<String> result=null;
+        List<String> result=null;
         String url = apiEndpoint+"&summaryRestriction="+outputLength;
         System.out.println("URL IS"+url);
         String summary="";
@@ -36,8 +38,8 @@ public class Intellexer {
     return result;
     }
 
-    private Set<String> getSummary(IntellexerOutput output){
-        Set<String> result = new HashSet<>();
+    private List<String> getSummary(IntellexerOutput output){
+        List<String> result = new ArrayList<>();
         for(IntellexerOutput.Item item : output.items){
             result.add(item.text);
         }

@@ -25,7 +25,7 @@ public class SummaryActivity extends AppCompatActivity {
 
     EditText editText = null;
     Context context = this;
-    Set<String> result;
+    List<String> result;
 
     private final String LOG_TAG = SummaryActivity.class.getSimpleName();
 
@@ -71,7 +71,7 @@ public class SummaryActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.summarizedoutput);
         Bundle p = getIntent().getExtras();
         String text = p.getString("recognizedString");
-        List<String> result = null;
+        result = null;
         try {
             result = new BackGroundTask().execute(text).get();
             editText.setText(result.toString());

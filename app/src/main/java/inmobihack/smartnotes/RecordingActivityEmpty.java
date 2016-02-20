@@ -1,6 +1,7 @@
 package inmobihack.smartnotes;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -26,6 +27,10 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
+    private CountDownTimer countDownTimer;
+
+    private String finalResult;
+    private int prevLength = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +53,10 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
+        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
         //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        finalResult = "";
 
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -67,6 +73,19 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
                 }
             }
         });
+
+        countDownTimer = new CountDownTimer(1000, 500) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                finalResult+=". ";
+                Log.i(LOG_TAG, "Sentence Finished");
+            }
+        }.start();
+
     }
 
     /// Activity methods
@@ -139,32 +158,33 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         // TODO: StringBuilder
 
-        String text = "";
-
-        if (matches != null && matches.size() > 0){
-            // As per doc, first element is most likely.
-            text = matches.get(0);
-        }
-
-//        for (String result : matches)
-//            text += result + "\n";
-
         Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra("recognizedString", text);
-        //startActivity(intent);
-        returnedText.setText(text);
+        intent.putExtra("recognizedString", finalResult);
+        startActivity(intent);
+        returnedText.setText(finalResult);
     }
 
     @Override
     public void onPartialResults(Bundle partialResults) {
-        Log.i(LOG_TAG, "onPartialResults" + partialResults);
+        Log.i(LOG_TAG, "onPartialResults" + partialResults.size());
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-        if (matches!= null || matches.size() > 0){
+        if (matches != null || matches.size() > 0){
             Log.i(LOG_TAG,"PartialResult: " + matches.get(0));
-            returnedText.setText(matches.get(0));
-        }
+            String partialString = matches.get(0);
+            if (prevLength + 1 < partialString.length()) {
 
+                String newWord = partialString.substring((prevLength == 0) ? 0 : prevLength + 1);
+                finalResult += " " + newWord;
+
+                returnedText.setText(newWord);
+                Log.i(LOG_TAG, "newWord: " + newWord);
+                prevLength = partialString.length();
+
+                countDownTimer.cancel();
+                countDownTimer.start();
+            }
+        }
     }
 
     @Override

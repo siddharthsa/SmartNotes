@@ -1,49 +1,29 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fullscreen_content_controls_save_summaries"
+    style="?metaButtonBarStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="bottom|center_horizontal"
     android:background="#0099cc"
-    tools:context="inmobihack.smartnotes.WriteReadSummaries">
+    android:orientation="vertical"
+    tools:ignore="UselessParent">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
+    <EditText
+        android:id="@+id/saveFileTextBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:text="@string/file_name" />
 
+    <Button
+        android:id="@+id/save_button"
+        style="?metaButtonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
 
+        android:text="@string/create_summary_notes" />
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+</LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls_save_summaries"
-            style="?metaButtonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/saveFileTextBox"
-                android:layout_gravity="left|top"
-                android:text="@string/file_name" />
-
-            <Button
-                android:id="@+id/save_button"
-                style="?metaButtonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/create_summary_notes"/>
-
-        </LinearLayout>
-    </FrameLayout>
-
-</FrameLayout>

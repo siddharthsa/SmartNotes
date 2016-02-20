@@ -35,6 +35,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         returnedText = (TextView) findViewById(R.id.textView1);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
+        toggleButton.setBackgroundResource(R.drawable.default_mic);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
         waveFormView.updateAmplitude(0, false);
 
@@ -56,11 +57,13 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    toggleButton.setBackgroundResource(R.drawable.default_mic);
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setIndeterminate(true);
                     speech.startListening(recognizerIntent);
                 }
                 else{
+                    toggleButton.setBackgroundResource(R.drawable.pressed_mic);
                     progressBar.setIndeterminate(false);
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();

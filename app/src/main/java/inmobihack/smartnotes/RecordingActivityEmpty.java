@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 import inmobihack.smartnotes.views.WaveFormView;
 
@@ -27,10 +28,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
-    private CountDownTimer countDownTimer;
-
+//    private CountDownTimer countDownTimer;
+    private final int pauseinMillis = 1000;
     private String finalResult;
     private int prevLength = 0;
+    private AtomicLong previousCall = new AtomicLong(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         returnedText = (TextView) findViewById(R.id.textView1);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
+        toggleButton.setBackgroundResource(R.drawable.default_mic);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
         waveFormView.updateAmplitude(0, false);
 
@@ -62,11 +65,13 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    toggleButton.setBackgroundResource(R.drawable.pressed_mic);
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setIndeterminate(true);
                     speech.startListening(recognizerIntent);
                 }
                 else{
+                    toggleButton.setBackgroundResource(R.drawable.default_mic);
                     progressBar.setIndeterminate(false);
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
@@ -74,17 +79,17 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             }
         });
 
-        countDownTimer = new CountDownTimer(1000, 500) {
-
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            public void onFinish() {
-                finalResult+=". ";
-                Log.i(LOG_TAG, "Sentence Finished");
-            }
-        }.start();
+//        countDownTimer = new CountDownTimer(1000, 500) {
+//
+//            public void onTick(long millisUntilFinished) {
+//
+//            }
+//
+//            public void onFinish() {
+//                finalResult+=". ";
+//                Log.i(LOG_TAG, "Sentence Finished");
+//            }
+//        }.start();
 
     }
 
@@ -168,6 +173,10 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     public void onPartialResults(Bundle partialResults) {
         Log.i(LOG_TAG, "onPartialResults" + partialResults.size());
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
+            Log.i(LOG_TAG,"Adding full stop");
+            finalResult += ".";
+        }
 
         if (matches != null || matches.size() > 0){
             Log.i(LOG_TAG,"PartialResult: " + matches.get(0));
@@ -181,10 +190,9 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
                 Log.i(LOG_TAG, "newWord: " + newWord);
                 prevLength = partialString.length();
 
-                countDownTimer.cancel();
-                countDownTimer.start();
             }
         }
+        previousCall.set(System.currentTimeMillis());
     }
 
     @Override

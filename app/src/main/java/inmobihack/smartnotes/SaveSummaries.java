@@ -127,26 +127,8 @@ public class SaveSummaries extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Try reading
-
-        readFile(filename);
     }
 
-    private void readFile(String filename) {
-        FileInputStream fis;
-        try {
-            fis = openFileInput(filename);
-            int content;
-            while ((content = fis.read()) != -1) {
-                // convert to char and display it
-                Log.d(TAG, String.valueOf((char) content));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

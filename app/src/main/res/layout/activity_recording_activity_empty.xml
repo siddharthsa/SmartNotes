@@ -21,6 +21,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
         android:text="ToggleButton"
+        android:textOff=""
+        android:textOn=""
+        android:background="@drawable/default_mic"
         android:layout_gravity="center_horizontal" />
 
     <inmobihack.smartnotes.views.WaveFormView

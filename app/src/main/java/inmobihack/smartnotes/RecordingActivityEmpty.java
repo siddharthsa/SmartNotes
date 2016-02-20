@@ -45,7 +45,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
         returnedText = (TextView) findViewById(R.id.textView1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
-        toggleButton.setBackgroundResource(R.drawable.default_mic);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
         waveFormView.updateAmplitude(0, false);
 
@@ -150,7 +149,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         String finalResult = matches.get(0);
         finalResult = punctuate(finalResult);
         Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra("recognizedString",finalResult );
+        intent.putExtra("recognizedString",finalResult);
         startActivity(intent);
         returnedText.setText(finalResult);
     }

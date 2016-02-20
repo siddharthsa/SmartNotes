@@ -109,13 +109,15 @@ public class SaveSummaries extends AppCompatActivity {
         String filename = ((EditText)findViewById(R.id.saveFileTextBox)).getText().toString();
 
         //TODO - hard coded data right now
-        String string = "This is test summarization";
+        Bundle p = getIntent().getExtras();
+        String text = p.getString("finalSummary");
+
         FileOutputStream outputStream;
         Log.d(TAG, "saveContentToDisk: Entered");
 
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(string.getBytes());
+            outputStream.write(text.getBytes());
             outputStream.close();
             Log.d(TAG, "wrote successfully at" + getFilesDir().getAbsolutePath());
 

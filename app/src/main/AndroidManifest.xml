@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="inmobihack.smartnotes">
 
+    <!-- TODO: Permissions (Grant automatically or run-time) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,10 +37,11 @@
         <!-- </activity> -->
 
         <activity
-            android:name=".SaveSummaries"
+            android:name=".RecordingActivityEmpty"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/FullscreenTheme">
+            android:label="@string/app_name">
+
+            <!-- android:theme="@style/FullscreenTheme"> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,6 +58,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="inmobihack.smartnotes.RecordingActivity" />
         </activity>
+        <activity android:name=".RecordingActivity" />
+        <activity android:name=".SummaryActivity"></activity>
     </application>
 
 </manifest>

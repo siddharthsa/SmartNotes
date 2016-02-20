@@ -1,6 +1,7 @@
 package inmobihack.smartnotes;
 
 import android.annotation.SuppressLint;
+import android.speech.RecognitionListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.view.View;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class RecordingActivity extends AppCompatActivity {
+public class RecordingActivity extends AppCompatActivity implements RecognitionListener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -158,5 +159,53 @@ public class RecordingActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+
+
+
+    @Override
+    public void onReadyForSpeech(Bundle params) {
+
+    }
+
+    @Override
+    public void onBeginningOfSpeech() {
+
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+
+    }
+
+    @Override
+    public void onError(int error) {
+
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+
+    }
+
+    @Override
+    public void onPartialResults(Bundle partialResults) {
+
+    }
+
+    @Override
+    public void onEvent(int eventType, Bundle params) {
+
     }
 }

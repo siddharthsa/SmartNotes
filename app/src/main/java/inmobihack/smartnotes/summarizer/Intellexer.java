@@ -8,21 +8,25 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by rohit.kochar on 20/02/16.
  */
 public class Intellexer {
-    private static final String apiEndpoint = "http://api.intellexer.com/summarizeText?apikey=00b85c4c-398d-447b-ad5e-edb0caca211c";
-    public Set<String> summarize(String text,int outputLength){
+    private static final String apiEndpoint = "http://api.intellexer.com/summarizeText?apikey=00b85c4c-398d-447b-ad5e-edb0caca211c&usePercentRestriction=true";
+    public List<String> summarize(String text,int outputLength){
         RestClient restClient = new RestClient();
         ObjectMapper mapper = new ObjectMapper();
-        Set<String> result=null;
+        List<String> result=null;
         String url = apiEndpoint+"&summaryRestriction="+outputLength;
+        System.out.println("URL IS"+url);
         String summary="";
         try {
+            Log.i("Intellexer API","Summarizing text"+text);
             summary = restClient.post(url,text);
             if(summary!=null && summary.length()!=0) {
                 IntellexerOutput output = mapper.readValue(summary, IntellexerOutput.class);
@@ -34,8 +38,8 @@ public class Intellexer {
     return result;
     }
 
-    private Set<String> getSummary(IntellexerOutput output){
-        Set<String> result = new HashSet<>();
+    private List<String> getSummary(IntellexerOutput output){
+        List<String> result = new ArrayList<>();
         for(IntellexerOutput.Item item : output.items){
             result.add(item.text);
         }
@@ -50,6 +54,6 @@ public class Intellexer {
             text += line;
             text += "\n";
         }
-        new Intellexer().summarize(text, 10);
+        new Intellexer().summarize(text, 1);
     }
 }

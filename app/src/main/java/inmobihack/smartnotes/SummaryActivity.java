@@ -59,7 +59,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         @Override
         protected Set<String> doInBackground(String... params) {
-            return new Intellexer().summarize(params[0], 10);
+            return new Intellexer().summarize(params[0], 33);
         }
     }
 }

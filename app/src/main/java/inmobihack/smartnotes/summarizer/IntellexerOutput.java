@@ -3,7 +3,7 @@ package inmobihack.smartnotes.summarizer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by rohit.kochar on 20/02/16.
@@ -20,5 +20,5 @@ public class IntellexerOutput {
       public double weight;
   }
     @JsonProperty
-    public Set<Item> items;
+    public List<Item> items;
 }

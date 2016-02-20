@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 import inmobihack.smartnotes.views.WaveFormView;
@@ -28,11 +29,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
-//    private CountDownTimer countDownTimer;
     private final int pauseinMillis = 1000;
-    private String finalResult;
-    private int prevLength = 0;
+    private String previousResult="";
+
     private AtomicLong previousCall = new AtomicLong(0);
+    private ConcurrentLinkedQueue<Integer> fullStops = new ConcurrentLinkedQueue<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +57,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
         //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        finalResult = "";
+        previousCall = new AtomicLong(0);
+        fullStops = new ConcurrentLinkedQueue<>();
 
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -80,21 +82,9 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             }
         });
 
-//        countDownTimer = new CountDownTimer(1000, 500) {
-//
-//            public void onTick(long millisUntilFinished) {
-//
-//            }
-//
-//            public void onFinish() {
-//                finalResult+=". ";
-//                Log.i(LOG_TAG, "Sentence Finished");
-//            }
-//        }.start();
 
     }
 
-    /// Activity methods
 
     @Override
     public void onResume() {
@@ -129,7 +119,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+//        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         progressBar.setProgress((int) rmsdB);
         waveFormView.updateAmplitude(rmsdB / 12, true);
     }
@@ -163,37 +153,55 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         // TODO: StringBuilder
-
+        String finalResult = matches.get(0);
+        finalResult = punctuate(finalResult);
         Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra("recognizedString", finalResult);
+        intent.putExtra("recognizedString",finalResult );
         startActivity(intent);
         returnedText.setText(finalResult);
+    }
+
+    private String punctuate(String text){
+        Log.i(LOG_TAG,"Text to punctuate "+text);
+        String result ="";
+        if(fullStops.size() ==0)
+            return text;
+        String tmp[] = text.split(" ");
+        Integer fullStopAt = fullStops.poll();
+        for (int i = 0 ;i<tmp.length ;i++){
+            result+=" "+tmp[i];
+        if(fullStopAt!=null && fullStopAt-1 == i){
+            result+=".";
+            fullStopAt = fullStops.poll();
+        }
+        }
+        return result;
     }
 
     @Override
     public void onPartialResults(Bundle partialResults) {
         Log.i(LOG_TAG, "onPartialResults" + partialResults.size());
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
-            Log.i(LOG_TAG,"Adding full stop");
-            finalResult += ".";
-        }
-
         if (matches != null || matches.size() > 0){
             Log.i(LOG_TAG,"PartialResult: " + matches.get(0));
-            String partialString = matches.get(0);
-            if (prevLength + 1 < partialString.length()) {
-
-                String newWord = partialString.substring((prevLength == 0) ? 0 : prevLength + 1);
-                finalResult += " " + newWord;
-
-                returnedText.setText(newWord);
-                Log.i(LOG_TAG, "newWord: " + newWord);
-                prevLength = partialString.length();
-
+            if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
+                Log.i(LOG_TAG, "Adding full stop");
+                fullStops.add(previousResult.split(" ").length);
             }
+//            String partialString = matches.get(0);
+//            if (prevLength + 1 < partialString.length()) {
+//
+//                String newWord = partialString.substring((prevLength == 0) ? 0 : prevLength + 1);
+//                finalResult += " " + newWord;
+//
+//                returnedText.setText(newWord);
+//                Log.i(LOG_TAG, "newWord: " + newWord);
+//                prevLength = partialString.length();
+//
+//            }
+            previousResult = matches.get(0);
+            previousCall.set(System.currentTimeMillis());
         }
-        previousCall.set(System.currentTimeMillis());
     }
 
     @Override

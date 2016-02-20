@@ -15,14 +15,16 @@ import java.util.Set;
  * Created by rohit.kochar on 20/02/16.
  */
 public class Intellexer {
-    private static final String apiEndpoint = "http://api.intellexer.com/summarizeText?apikey=00b85c4c-398d-447b-ad5e-edb0caca211c";
+    private static final String apiEndpoint = "http://api.intellexer.com/summarizeText?apikey=00b85c4c-398d-447b-ad5e-edb0caca211c&usePercentRestriction=true";
     public Set<String> summarize(String text,int outputLength){
         RestClient restClient = new RestClient();
         ObjectMapper mapper = new ObjectMapper();
         Set<String> result=null;
         String url = apiEndpoint+"&summaryRestriction="+outputLength;
+        System.out.println("URL IS"+url);
         String summary="";
         try {
+            Log.i("Intellexer API","Summarizing text"+text);
             summary = restClient.post(url,text);
             if(summary!=null && summary.length()!=0) {
                 IntellexerOutput output = mapper.readValue(summary, IntellexerOutput.class);
@@ -50,6 +52,6 @@ public class Intellexer {
             text += line;
             text += "\n";
         }
-        new Intellexer().summarize(text, 10);
+        new Intellexer().summarize(text, 1);
     }
 }

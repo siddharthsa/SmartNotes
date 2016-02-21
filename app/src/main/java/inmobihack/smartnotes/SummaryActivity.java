@@ -74,8 +74,6 @@ public class SummaryActivity extends AppCompatActivity {
         result = null;
         try {
             result = new BackGroundTask().execute(text).get();
-
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

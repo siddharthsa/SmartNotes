@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.OutputStream;
 import java.util.List;
 import java.io.FileOutputStream;
 
@@ -74,17 +76,19 @@ public class SummaryActivity extends AppCompatActivity {
         result = null;
         try {
             result = new BackGroundTask().execute(text).get();
+
+            String displayString = "";
+            for(String st:result){
+                displayString = st.toString() + "\n";
+            }
+            editText.setText(displayString);
+            editText.setSelection(editText.getText().length());
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        String displayString ="";
-        for(String st:result){
-            displayString+=st+"\n";
-        }
-        editText.setText(displayString);
-        editText.setSelection(editText.getText().length());
 
         findViewById(R.id.approve_button).setOnClickListener(saveSummaryListener);
     }
@@ -120,7 +124,9 @@ public class SummaryActivity extends AppCompatActivity {
 
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(result.toString().getBytes());
+            for(String st:result){
+                outputStream.write((st.toString() + "\n").getBytes());
+            }
             outputStream.close();
             Log.d(LOG_TAG, "wrote successfully at" + getFilesDir().getAbsolutePath());
 

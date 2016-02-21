@@ -127,7 +127,6 @@ public class SummaryActivity extends AppCompatActivity {
             for(String st:result){
                 outputStream.write((st.toString() + "\n").getBytes());
             }
-            outputStream.write(result.toString().getBytes());
             outputStream.close();
             Log.d(LOG_TAG, "wrote successfully at" + getFilesDir().getAbsolutePath());
 

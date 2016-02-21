@@ -76,19 +76,19 @@ public class SummaryActivity extends AppCompatActivity {
         result = null;
         try {
             result = new BackGroundTask().execute(text).get();
+
             String displayString = "";
             for(String st:result){
-                displayString = st.toString() + "\n";
+                displayString += st.toString()+"\n";
             }
-
             editText.setText(displayString);
             editText.setSelection(editText.getText().length());
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
 
         findViewById(R.id.approve_button).setOnClickListener(saveSummaryListener);
     }

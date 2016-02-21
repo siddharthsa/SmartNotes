@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:appNs="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:appNs="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="inmobihack.smartnotes.SummaryActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="15dp"
-        android:text="Just tap on text to add more notes"
-        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_gravity="center" />
+        android:layout_marginTop="10dp"
+        android:text="Just tap on text to add more notes"
+        android:textAlignment="center"
+        android:textSize="15dp" />
+
 
     <EditText
+        android:id="@+id/summarizedoutput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/summarizedoutput"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:inputType="textCapSentences|textMultiLine"
+        android:scrollbars="vertical" />
+
 
     <ImageButton
         android:id="@+id/approve_button"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
+        android:background="@drawable/selector"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_done_all_black_48dp"
-        android:background="@drawable/selector"/>
+        android:src="@drawable/ic_done_all_black_48dp" />
 
     <!--<at.markushi.ui.CircleButton-->
     <!--android:id="@+id/approve_button"-->
     <!--style="?metaButtonBarButtonStyle"-->
     <!--android:layout_width="120dp"-->
     <!--android:layout_height="120dp"-->
-        <!--android:layout_gravity="bottom|center_horizontal"-->
-        <!--android:text="@string/approve"-->
-        <!--android:src="@drawable/ic_action_tick"-->
-        <!--app:cb_color="#99CC00"-->
-        <!--app:cb_pressedRingWidth="8dip"-->
-        <!--/>-->
+    <!--android:layout_gravity="bottom|center_horizontal"-->
+    <!--android:text="@string/approve"-->
+    <!--android:src="@drawable/ic_action_tick"-->
+    <!--app:cb_color="#99CC00"-->
+    <!--app:cb_pressedRingWidth="8dip"-->
+    <!--/>-->
 
 </LinearLayout>

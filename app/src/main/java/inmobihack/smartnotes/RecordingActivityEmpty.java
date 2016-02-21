@@ -40,6 +40,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private String previousResult="";
     private String finalGlobalResult="";
     private ImageButton listButton;
+    private int prevLength = 0;
 
     private AtomicLong previousCall = new AtomicLong(0);
     private ConcurrentLinkedQueue<Integer> fullStops = new ConcurrentLinkedQueue<>();
@@ -58,14 +59,13 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         speech.setRecognitionListener(this);
 
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-IN");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
 //        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 100000);
 //        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,100000);
-//        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
-       // recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS,100000);
+
 
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         previousCall = new AtomicLong(0);
@@ -146,8 +146,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
-
+        //Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         waveFormView.updateAmplitude(rmsdB / 12, true);
     }
 
@@ -164,7 +163,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             toggleButton.setChecked(false);
             waveFormView.updateAmplitude(0, false);
         }
-
     }
 
     @Override
@@ -218,13 +216,17 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         Log.i(LOG_TAG, "onPartialResults" + partialResults.size());
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         if (matches != null || matches.size() > 0){
-            Log.i(LOG_TAG,"PartialResult: " + matches.get(0));
-            if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
-                Log.i(LOG_TAG, "Adding full stop");
-                fullStops.add(previousResult.split(" ").length);
+            Log.i(LOG_TAG, "PartialResult: " + matches.get(0));
+            if (prevLength < matches.get(0).length()){ // New word has been added.
+                if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
+                    Log.i(LOG_TAG, "Adding full stop");
+                    fullStops.add(previousResult.split(" ").length);
+                }
+                previousResult = matches.get(0);
+                previousCall.set(System.currentTimeMillis());
+
+                prevLength = matches.get(0).length();
             }
-            previousResult = matches.get(0);
-            previousCall.set(System.currentTimeMillis());
         }
     }
 

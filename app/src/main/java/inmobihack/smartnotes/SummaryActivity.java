@@ -39,7 +39,7 @@ public class SummaryActivity extends AppCompatActivity {
             builder.setTitle(R.string.saveFile);
             builder.setView(dialogLayout);
             final EditText fileNameEditText = (EditText) dialogLayout.findViewById(R.id.fileName);
-            fileNameEditText.setText(String.valueOf(System.currentTimeMillis()));
+            fileNameEditText.setText(String.valueOf("note_" + System.currentTimeMillis()));
             builder.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -75,6 +75,7 @@ public class SummaryActivity extends AppCompatActivity {
         try {
             result = new BackGroundTask().execute(text).get();
             editText.setText(result.toString());
+            editText.setSelection(editText.getText().length());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -106,7 +107,7 @@ public class SummaryActivity extends AppCompatActivity {
         // writeExternal();
         if (result != null){
             if (fileName.isEmpty())
-                fileName = String.valueOf(System.currentTimeMillis());
+                fileName = String.valueOf("note_"+System.currentTimeMillis());
             writeInternal(fileName);
         }
         else

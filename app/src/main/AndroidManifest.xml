@@ -29,8 +29,9 @@
             android:name=".ListNotesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_list_notes_acitivity"
-            android:parentActivityName=".RecordingActivityEmpty"
-            android:theme="@style/FullscreenTheme">
+
+            android:parentActivityName=".RecordingActivityEmpty">
+            <!--android:theme="@style/FullscreenTheme">-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="inmobihack.smartnotes.SaveSummaries" />
@@ -41,8 +42,8 @@
             android:name=".ViewSummaryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_view_summary"
-            android:parentActivityName=".ListNotesActivity"
-            android:theme="@style/FullscreenTheme">
+            android:parentActivityName=".ListNotesActivity">
+            <!--android:theme="@style/FullscreenTheme">-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="inmobihack.smartnotes.RecordingActivityEmpty" />

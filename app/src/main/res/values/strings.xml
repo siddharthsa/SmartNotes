@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartNotes</string>
+    <string name="app_name">Smart Notes</string>
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -8,11 +8,11 @@
     <string name="file_name">Enter File Name</string>
     <string name="create_summary_notes">Save Notes</string>
 
-    <string name="title_activity_list_notes_acitivity">ListNotesAcitivity</string>
+    <string name="title_activity_list_notes_acitivity">Saved Notes</string>
     <string name="list_notes">Saved Notes</string>
     <string name="approve">Looks\ngood!</string>
 
-    <string name="title_activity_view_summary">ViewSummaryActivity</string>
+    <string name="title_activity_view_summary">Note</string>
     <string name="filename_hint">filename</string>
     <string name="save">save</string>
     <string name="close">close</string>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@android:color/transparent"
     tools:context=".ViewSummaryActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -12,10 +12,10 @@
         android:id="@+id/summary_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
 </ScrollView>

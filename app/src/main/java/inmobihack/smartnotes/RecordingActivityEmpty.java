@@ -12,8 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -35,6 +39,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private final int pauseinMillis = 700;
     private String previousResult="";
     private String finalGlobalResult="";
+    private ImageButton listButton;
 
     private AtomicLong previousCall = new AtomicLong(0);
     private ConcurrentLinkedQueue<Integer> fullStops = new ConcurrentLinkedQueue<>();
@@ -75,21 +80,55 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
                 if (isChecked){
                     returnedText.setText("");
-                    toggleButton.setBackgroundResource(R.drawable.pressed_mic);
+                    toggleButton.setBackgroundResource(R.drawable.ic_mic_off_black_48dp);
                     speech.startListening(recognizerIntent);
                 }
                 else{
-                    toggleButton.setBackgroundResource(R.drawable.default_mic);
+                    toggleButton.setBackgroundResource(R.drawable.ic_mic_black_48dp);
                     speech.stopListening();
                 }
             }
         });
+
+//        listButton = (ImageButton) findViewById(R.id.listNotes);
+//        listButton.setOnClickListener(new CompoundButton.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, ListNotesActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notes:
+                Intent intent = new Intent(this, ListNotesActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+
         Log.i(LOG_TAG, "Resumed");
     }
 

@@ -32,7 +32,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
     private TextView returnedText;
     private ToggleButton toggleButton;
-    private SpeechRecognizer speech = null;
+
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
@@ -53,8 +53,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
         waveFormView.updateAmplitude(0, false);
-
-        speech = SpeechRecognizer.createSpeechRecognizer(this);
+        final SpeechRecognizer speech = SpeechRecognizer.createSpeechRecognizer(this);
 
         speech.setRecognitionListener(this);
 
@@ -132,16 +131,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         Log.i(LOG_TAG, "Resumed");
     }
 
-    @Override
-    protected void onPause() {
-        Log.i(LOG_TAG, "Paused");
-        if (speech != null) {
-            speech.destroy();
-            Log.i(LOG_TAG, "destroy");
-        }
-
-        super.onPause();
-    }
 
     /// RecognitionListener interface implementations
 
@@ -202,7 +191,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             startActivity(intent);
             returnedText.setText(finalGlobalResult);
         }else{
-         speech.startListening(recognizerIntent);
+         //speech.startListening(recognizerIntent);
         }
 
     }

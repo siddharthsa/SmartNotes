@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.OutputStream;
 import java.util.List;
 import java.io.FileOutputStream;
 
@@ -74,16 +76,19 @@ public class SummaryActivity extends AppCompatActivity {
         result = null;
         try {
             result = new BackGroundTask().execute(text).get();
-            editText.setText(result.toString());
+            String displayString = "";
+            for(String st:result){
+                displayString = st.toString() + "\n";
+            }
+
+            editText.setText(displayString);
             editText.setSelection(editText.getText().length());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        String displayString ="";
 
-        editText.setText(displayString);
 
         findViewById(R.id.approve_button).setOnClickListener(saveSummaryListener);
     }

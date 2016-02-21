@@ -89,13 +89,11 @@ public class ListNotesActivity extends AppCompatActivity {
                 String itemValue = (String) listView.getItemAtPosition(position);
 
                 Intent intent = new Intent(view.getContext(), ViewSummaryActivity.class);
-                intent.putExtra("summaryFile",itemValue);
+                intent.putExtra("summaryFile", itemValue);
                 startActivity(intent);
             }
 
         });
-
-
     }
 
 

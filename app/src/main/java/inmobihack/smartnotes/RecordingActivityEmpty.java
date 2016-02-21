@@ -12,8 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -32,8 +36,10 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private Intent recognizerIntent;
     private String LOG_TAG = "RecordingActivityEmpty";
     private WaveFormView waveFormView;
-    private final int pauseinMillis = 1000;
+    private final int pauseinMillis = 700;
     private String previousResult="";
+    private String finalGlobalResult="";
+    private ImageButton listButton;
 
     private AtomicLong previousCall = new AtomicLong(0);
     private ConcurrentLinkedQueue<Integer> fullStops = new ConcurrentLinkedQueue<>();
@@ -45,7 +51,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
         returnedText = (TextView) findViewById(R.id.textView1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
-        toggleButton.setBackgroundResource(R.drawable.default_mic);
         waveFormView = (WaveFormView) findViewById(R.id.wave);
         waveFormView.updateAmplitude(0, false);
 
@@ -57,9 +62,12 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
-        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 100000);
+//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,100000);
+//        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS,100000);
+
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         previousCall = new AtomicLong(0);
         fullStops = new ConcurrentLinkedQueue<>();
@@ -71,21 +79,56 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
-                    toggleButton.setBackgroundResource(R.drawable.pressed_mic);
+                    returnedText.setText("");
+                    toggleButton.setBackgroundResource(R.drawable.ic_mic_off_black_48dp);
                     speech.startListening(recognizerIntent);
                 }
                 else{
-                    toggleButton.setBackgroundResource(R.drawable.default_mic);
+                    toggleButton.setBackgroundResource(R.drawable.ic_mic_black_48dp);
                     speech.stopListening();
                 }
             }
         });
+
+//        listButton = (ImageButton) findViewById(R.id.listNotes);
+//        listButton.setOnClickListener(new CompoundButton.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, ListNotesActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notes:
+                Intent intent = new Intent(this, ListNotesActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+
         Log.i(LOG_TAG, "Resumed");
     }
 
@@ -128,8 +171,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     @Override
     public void onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech");
-        toggleButton.setChecked(false);
-        waveFormView.updateAmplitude(0, false);
+        if(!toggleButton.isChecked()) {
+            toggleButton.setChecked(false);
+            waveFormView.updateAmplitude(0, false);
+        }
+
     }
 
     @Override
@@ -149,10 +195,16 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         // TODO: StringBuilder
         String finalResult = matches.get(0);
         finalResult = punctuate(finalResult);
-        Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra("recognizedString",finalResult );
-        startActivity(intent);
-        returnedText.setText(finalResult);
+        finalGlobalResult+= " "+finalResult;
+        if(!toggleButton.isChecked()) {
+            Intent intent = new Intent(this, SummaryActivity.class);
+            intent.putExtra("recognizedString", finalGlobalResult);
+            startActivity(intent);
+            returnedText.setText(finalGlobalResult);
+        }else{
+         speech.startListening(recognizerIntent);
+        }
+
     }
 
     private String punctuate(String text){
@@ -196,34 +248,34 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         String message;
         switch (errorCode) {
             case SpeechRecognizer.ERROR_AUDIO:
-                message = "Audio recording error";
+                message = "Audio recording error. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_CLIENT:
-                message = "Client side error";
+                message = "Client side error. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                message = "Insufficient permissions";
+                message = "Insufficient permissions. Please give permissions from Settings > Apps and try again.";
                 break;
             case SpeechRecognizer.ERROR_NETWORK:
-                message = "Network error";
+                message = "Network error. Please switch on your network and try again";
                 break;
             case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                message = "Network timeout";
+                message = "Network timeout. Network is very poor. Please switch to a better network and try again";
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
-                message = "No match";
+                message = "No match found for the voice. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                message = "RecognitionService busy";
+                message = "RecognitionService seems to be used by another app. Please try again.";
                 break;
             case SpeechRecognizer.ERROR_SERVER:
-                message = "error from server";
+                message = "Some issue with server. Please try again";
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                message = "No speech input";
+                message = "Start speaking when you see wave. Please try again.";
                 break;
             default:
-                message = "Didn't understand, please try again.";
+                message = "Something went wrong, please try again.";
                 break;
         }
         return message;

@@ -74,8 +74,8 @@ public class SummaryActivity extends AppCompatActivity {
         result = null;
         try {
             result = new BackGroundTask().execute(text).get();
-            editText.setText(result.toString());
-            editText.setSelection(editText.getText().length());
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -86,6 +86,7 @@ public class SummaryActivity extends AppCompatActivity {
             displayString+=st+"\n";
         }
         editText.setText(displayString);
+        editText.setSelection(editText.getText().length());
 
         findViewById(R.id.approve_button).setOnClickListener(saveSummaryListener);
     }

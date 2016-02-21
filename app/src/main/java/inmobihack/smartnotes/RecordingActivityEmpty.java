@@ -40,6 +40,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
     private String previousResult="";
     private String finalGlobalResult="";
     private ImageButton listButton;
+    private int prevLength = 0;
 
     private AtomicLong previousCall = new AtomicLong(0);
     private ConcurrentLinkedQueue<Integer> fullStops = new ConcurrentLinkedQueue<>();
@@ -146,8 +147,7 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
-
+        //Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         waveFormView.updateAmplitude(rmsdB / 12, true);
     }
 
@@ -164,7 +164,6 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             toggleButton.setChecked(false);
             waveFormView.updateAmplitude(0, false);
         }
-
     }
 
     @Override
@@ -218,13 +217,17 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         Log.i(LOG_TAG, "onPartialResults" + partialResults.size());
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         if (matches != null || matches.size() > 0){
-            Log.i(LOG_TAG,"PartialResult: " + matches.get(0));
-            if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
-                Log.i(LOG_TAG, "Adding full stop");
-                fullStops.add(previousResult.split(" ").length);
+            Log.i(LOG_TAG, "PartialResult: " + matches.get(0));
+            if (prevLength < matches.get(0).length()){ // New word has been added.
+                if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
+                    Log.i(LOG_TAG, "Adding full stop");
+                    fullStops.add(previousResult.split(" ").length);
+                }
+                previousResult = matches.get(0);
+                previousCall.set(System.currentTimeMillis());
+
+                prevLength = matches.get(0).length();
             }
-            previousResult = matches.get(0);
-            previousCall.set(System.currentTimeMillis());
         }
     }
 

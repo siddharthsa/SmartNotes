@@ -78,12 +78,11 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked){
+                if (isChecked) {
                     returnedText.setText("");
                     toggleButton.setBackgroundResource(R.drawable.ic_mic_off_black_48dp);
                     speech.startListening(recognizerIntent);
-                }
-                else{
+                } else {
                     toggleButton.setBackgroundResource(R.drawable.ic_mic_black_48dp);
                     speech.stopListening();
                 }
@@ -218,6 +217,14 @@ public class RecordingActivityEmpty extends AppCompatActivity implements Recogni
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         if (matches != null || matches.size() > 0){
             Log.i(LOG_TAG, "PartialResult: " + matches.get(0));
+
+            int index = matches.get(0).lastIndexOf(" ");
+
+            if (index == -1) //Intial
+                returnedText.setText(matches.get(0));
+            else if (index < matches.get(0).length())
+                returnedText.setText(matches.get(0).substring(index));
+
             if (prevLength < matches.get(0).length()){ // New word has been added.
                 if(previousCall.get()!=0 && System.currentTimeMillis() - previousCall.get() >= pauseinMillis){
                     Log.i(LOG_TAG, "Adding full stop");

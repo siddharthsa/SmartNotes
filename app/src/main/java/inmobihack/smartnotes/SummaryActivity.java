@@ -81,9 +81,7 @@ public class SummaryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String displayString ="";
-        for(String st:result){
-            displayString+=st+"\n";
-        }
+
         editText.setText(displayString);
 
         findViewById(R.id.approve_button).setOnClickListener(saveSummaryListener);
@@ -120,6 +118,9 @@ public class SummaryActivity extends AppCompatActivity {
 
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            for(String st:result){
+                outputStream.write((st.toString() + "\n").getBytes());
+            }
             outputStream.write(result.toString().getBytes());
             outputStream.close();
             Log.d(LOG_TAG, "wrote successfully at" + getFilesDir().getAbsolutePath());
